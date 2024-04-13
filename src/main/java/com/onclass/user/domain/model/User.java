@@ -7,18 +7,17 @@ public class User {
     private String lastName;
     private String phone;
     private String email;
-    private Long roleId;
+    private Role role;
     private String password;
 
     public User(Long id, String document,String firstName, String lastName,
-                String phone, String email, Long roleId, String password) {
+                String phone, String email, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.document = document;
         this.phone = phone;
         this.email = email;
-        this.roleId = roleId;
         this.password = password;
     }
 
@@ -46,16 +45,18 @@ public class User {
         return email;
     }
 
-    public Long getRoleId() {
-        return roleId;
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+
 }
 

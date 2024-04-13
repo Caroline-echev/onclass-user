@@ -22,12 +22,13 @@ public class UserEntity {
     private String firstName;
     @Column(nullable = false)
     private String lastName;
-
+    @Column(nullable = false )
     private String phone;
+    @Column(nullable = false )
     private String email;
-    private Long roleId;
+    @Column(nullable = false )
     private String password;
     @ManyToOne
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
 }

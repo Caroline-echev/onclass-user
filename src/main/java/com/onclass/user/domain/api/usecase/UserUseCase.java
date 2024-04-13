@@ -11,8 +11,9 @@ public class UserUseCase implements IUserServicePort {
         this.userPersistencePort = userPersistencePort;
     }
     @Override
-    public User addUser(User user) {
-        return userPersistencePort.addUser(user);
+    public User registerUser(User user) {
+
+        return userPersistencePort.registerUser(user);
     }
 
 }

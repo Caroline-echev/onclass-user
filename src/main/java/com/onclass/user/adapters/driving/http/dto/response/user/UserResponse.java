@@ -1,5 +1,6 @@
-package com.onclass.user.adapters.driving.http.dto.response.technology;
+package com.onclass.user.adapters.driving.http.dto.response.user;
 
+import com.onclass.user.adapters.driving.http.dto.response.role.RoleResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,6 +14,6 @@ public class UserResponse {
     private final String lastName;
     private final String phone;
     private final String email;
-    private final Long roleId;
+    private final RoleResponse role;
 
 }
