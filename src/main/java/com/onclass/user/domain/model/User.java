@@ -1,5 +1,7 @@
 package com.onclass.user.domain.model;
 
+import com.onclass.user.adapters.driven.jpa.mysql.entity.RoleEntity;
+
 public class User {
     private Long id;
     private String document;
@@ -20,6 +22,8 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+
 
     public Long getId() {
         return id;
@@ -58,5 +62,8 @@ public class User {
     }
 
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
 

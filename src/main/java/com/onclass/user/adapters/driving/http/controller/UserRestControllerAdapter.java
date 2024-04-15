@@ -19,7 +19,7 @@ public class UserRestControllerAdapter {
     private final IUserServicePort userServicePort;
     private final IUserRequestMapper userRequestMapper;
     private final IUserResponseMapper userResponseMapper;
-    @PostMapping("/addUser")
+    @PostMapping("/registerUser")
     public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody AddUserRequest request){
        User user = userServicePort.registerUser(userRequestMapper.addRequestToUser(request));
         UserResponse response = userResponseMapper.toUserResponse(user);
