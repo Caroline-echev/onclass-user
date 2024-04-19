@@ -9,16 +9,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class LoginRequest {
-    @NotBlank(message = RequestConstants.FIELD_EMPTY_MESSAGE)
-    @Email(message = RequestConstants.FIELD_EMAIL_INVALID_FORMAT_MESSAGE)
-    String email;
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class LoginRequest {
+        @NotBlank(message = RequestConstants.FIELD_EMPTY_MESSAGE)
+        @Email(message = RequestConstants.FIELD_EMAIL_INVALID_FORMAT_MESSAGE)
+        String email;
 
-    @NotBlank(message = RequestConstants.FIELD_EMPTY_MESSAGE)
-    @Pattern(regexp = RequestConstants.PASSWORD_PATTERN, message = RequestConstants.FIELD_PASSWORD_INVALID_FORMAT_MESSAGE)
-    String password;
-}
+        @NotBlank(message = RequestConstants.FIELD_EMPTY_MESSAGE)
+        @Pattern(regexp = RequestConstants.PASSWORD_PATTERN, message = RequestConstants.FIELD_PASSWORD_INVALID_FORMAT_MESSAGE)
+        String password;
+    }

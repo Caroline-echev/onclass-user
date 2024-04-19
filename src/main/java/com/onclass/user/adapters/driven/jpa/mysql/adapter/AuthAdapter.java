@@ -2,6 +2,7 @@ package com.onclass.user.adapters.driven.jpa.mysql.adapter;
 
 import com.onclass.user.adapters.driven.jpa.mysql.entity.RoleEntity;
 import com.onclass.user.adapters.driven.jpa.mysql.entity.UserEntity;
+import com.onclass.user.adapters.driven.jpa.mysql.mapper.IAuthMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.mapper.IRoleEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.mapper.IUserEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.repository.IRoleRepository;
@@ -13,6 +14,7 @@ import com.onclass.user.adapters.driving.http.mapper.IUserRequestMapper;
 import com.onclass.user.configuration.Constants;
 import com.onclass.user.configuration.jwt.JwtService;
 import com.onclass.user.domain.exception.NoDataFoundException;
+import com.onclass.user.domain.model.Auth;
 import com.onclass.user.domain.model.Role;
 import com.onclass.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
@@ -39,26 +41,25 @@ public class AuthAdapter {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse login(LoginRequest request) {
+   public AuthResponse login(Auth auth) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            UserDetails userDetails = userRepository.findByEmail(request.getEmail())
-                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + request.getEmail()));
-            String token = jwtService.getToken(userDetails);
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(auth.getEmail(), auth.getPassword()));
+            UserEntity userEntity = userRepository.findByEmail(auth.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + auth.getEmail()));
+            String token = jwtService.getToken(userEntityMapper.toUserModel(userEntity));
             return new AuthResponse(token);
         } catch (Exception e) {
-            // Manejar errores de autenticación
-            throw new BadCredentialsException("Credenciales inválidas");
+            throw new BadCredentialsException(e.getMessage());
         }
 
     }
-    public AuthResponse register(AuthRegisterRequest request) {
-        User user = userRequestMapper.authRegisterRequestToUser(request);
+    public AuthResponse register(User user ) {
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));
 
         return AuthResponse.builder()
-                .token(jwtService.getToken(userEntity))
+                .token(jwtService.getToken(userEntityMapper.toUserModel(userEntity)))
                 .build();
 
     }

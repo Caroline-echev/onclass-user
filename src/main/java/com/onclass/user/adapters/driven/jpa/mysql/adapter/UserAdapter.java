@@ -2,6 +2,7 @@ package com.onclass.user.adapters.driven.jpa.mysql.adapter;
 
 
 import com.onclass.user.adapters.driven.jpa.mysql.entity.RoleEntity;
+import com.onclass.user.adapters.driven.jpa.mysql.entity.UserEntity;
 import com.onclass.user.adapters.driven.jpa.mysql.mapper.IRoleEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.mapper.IUserEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.repository.IRoleRepository;
@@ -25,27 +26,24 @@ public class UserAdapter implements IUserPersistencePort {
     private final IRoleEntityMapper roleEntityMapper;
 
     @Override
-    public User registerUser(User user) {
-
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistsException(Constants.USER_EMAIL_ALREADY_EXISTS_EXCEPTION_MESSAGE);
-        }
-        if (userRepository.findByDocument(user.getDocument()).isPresent()) {
-            throw new DocumentAlreadyExistsException(Constants.USER_DOCUMENT_ALREADY_EXISTS_EXCEPTION_MESSAGE);
-        }
-
+    public void registerUser(User user) {
 
         user.setRole(getDefaultRole());
-
         userRepository.save(userEntityMapper.toEntity(user));
-
-        return  user;
     }
 
+
     private Role getDefaultRole() {
-        RoleEntity role =  roleRepository.findById(1L)
+        RoleEntity role =  roleRepository.findById(1L)//TODO: BUSCAR POR NOMBRE
                 .orElseThrow(() -> new NoDataFoundException(Constants.NO_DATA_FOUND_EXCEPTION_MESSAGE));
         return  roleEntityMapper.toModel(role);
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(userEntityMapper::toUserModel)
+                .orElseThrow(() -> new NoDataFoundException("User not found for email: " + email));
+
+    }
 }

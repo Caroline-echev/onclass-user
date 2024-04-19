@@ -28,10 +28,6 @@ public class RoleEntity {
     private String name;
     private String description;
 
-    public List<GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" +name));
-        return authorities;
-    }
+
 
 }

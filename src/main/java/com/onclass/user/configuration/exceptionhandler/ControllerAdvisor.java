@@ -9,6 +9,7 @@ import com.onclass.user.domain.exception.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -49,5 +50,10 @@ public class ControllerAdvisor {
         FieldError firstFieldError = exception.getFieldErrors().get(0);
         return ResponseEntity.badRequest().body(new ExceptionCodeResponse(firstFieldError.getDefaultMessage(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value()));
+    }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ExceptionCodeResponse> handleBadCredentialsException(BadCredentialsException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionCodeResponse(exception.getMessage(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(), LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value()));
     }
 }

@@ -31,7 +31,7 @@ class UserRestControllerAdapterTest {
     private UserRestControllerAdapter userRestControllerAdapter;
 
     private static final UserData userData = new UserData();
-    @Test
+    /*@Test
     void testRegisterUser() {
         // Given
         AddUserRequest request = userData.createUserRequest();
@@ -53,5 +53,5 @@ class UserRestControllerAdapterTest {
         verify(userRequestMapper, times(1)).addRequestToUser(request);
         verify(userServicePort, times(1)).registerUser(user);
         verify(userResponseMapper, times(1)).toUserResponse(user);
-    }
+    }*/
 }

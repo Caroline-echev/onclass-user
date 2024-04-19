@@ -58,10 +58,10 @@ class UserAdapterTest {
         when(roleEntityMapper.toModel(any(RoleEntity.class))).thenReturn(RoleData.roleAdmin());
 
         // WHEN
-        User registeredUser = userAdapter.registerUser(user);
+         userAdapter.registerUser(user);
 
         // THEN
-        assertNotNull(registeredUser);
+
         verify(userRepository).findByEmail(anyString());
         verify(userRepository).findByDocument(anyString());
         verify(roleRepository).findById(anyLong());

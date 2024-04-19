@@ -1,5 +1,8 @@
 package com.onclass.user.configuration.jwt;
 
+import com.onclass.user.adapters.driven.jpa.mysql.mapper.IAuthMapper;
+import com.onclass.user.domain.model.User;
+import com.onclass.user.domain.spi.ITokenPort;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,23 +18,28 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtService implements ITokenPort {
+
 
     private static final String SECRET_KEY = "5CD5EC515986560833B8688012A5BE43E0513E148EA78A692A851D9F16D5DCE4";
 
-    public String getToken(UserDetails user) {
-        return getToken(new HashMap<>(), user);
+    @Override
+    public String getToken(User user) {
+
+        return getToken(new HashMap<>(), user );
     }
 
-    private String getToken(Map<String, Object> extraClaims, UserDetails user) {
+
+ 	private String getToken(Map<String, ?> extraClaims, User subject) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(user.getUsername())
+                .setSubject(subject.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
+
     }
 
     private Key getKey() {

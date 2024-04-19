@@ -3,9 +3,11 @@ package com.onclass.user.adapters.driven.jpa.mysql.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 
 @Entity
@@ -38,8 +40,9 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getAuthorities();
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.getName()));
     }
+
     @Override
     public String getPassword() {
         return password;
@@ -67,7 +70,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
 

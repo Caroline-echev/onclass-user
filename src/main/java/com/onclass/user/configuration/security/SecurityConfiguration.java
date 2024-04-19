@@ -22,15 +22,7 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authProvider;
 
-    @Bean
-    public RequestMatcher whiteList() {
-        List<String> whitelist = List.of(
 
-                "/auth/login"
-        );
-
-        return request -> whitelist.stream().anyMatch(request.getServletPath()::equals);
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,9 +32,9 @@ public class SecurityConfiguration {
                                 .disable())
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/auth/login"
-
-                                ).permitAll()
+                                .requestMatchers(
+                                        "/auth/**"
+                                ).permitAll().requestMatchers("/user/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager->
@@ -54,4 +46,5 @@ public class SecurityConfiguration {
 
 
     }
+
 }

@@ -9,6 +9,7 @@ import com.onclass.user.domain.api.IUserServicePort;
 import com.onclass.user.domain.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,14 @@ public class UserRestControllerAdapter {
     private final IUserServicePort userServicePort;
     private final IUserRequestMapper userRequestMapper;
     private final IUserResponseMapper userResponseMapper;
+
     @PostMapping("/registerUser")
-    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody AddUserRequest request){
-       User user = userServicePort.registerUser(userRequestMapper.addRequestToUser(request));
-        UserResponse response = userResponseMapper.toUserResponse(user);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> registerUser(@Valid @RequestBody AddUserRequest request) {
+        var user = userRequestMapper.addRequestToUser(request);
+        userServicePort.registerUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
+
 }

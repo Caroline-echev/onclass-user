@@ -13,10 +13,11 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.IGNORE
 )
 public interface IUserRequestMapper {
-    @Mapping(target = "id", ignore = true)
-    User addRequestToUser(@Valid AddUserRequest addUserRequest);
 
     @Mapping(target = "id", ignore = true)
-    User authRegisterRequestToUser(@Valid AuthRegisterRequest authRegisterRequest);
+    User addRequestToUser( AddUserRequest addUserRequest);
+
+    @Mapping(target = "id", ignore = true)
+    User authRegisterRequestToUser(AuthRegisterRequest authRegisterRequest);
 
 }
