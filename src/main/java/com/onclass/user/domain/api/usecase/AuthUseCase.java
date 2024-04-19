@@ -23,4 +23,10 @@ public class AuthUseCase implements IAuthServicePort {
         User user = userServicePort.getUserByEmail(auth.getEmail());
         return tokenPort.getToken(user);
     }
+
+    @Override
+    public String registerAdmin(User user) {
+        return tokenPort.getToken(user);
+
+    }
 }

@@ -2,6 +2,7 @@ package com.onclass.user.adapters.driving.http.controller;
 
 import com.onclass.user.adapters.driven.jpa.mysql.adapter.AuthAdapter;
 import com.onclass.user.adapters.driven.jpa.mysql.mapper.IAuthMapper;
+import com.onclass.user.adapters.driving.http.dto.request.AddUserRequest;
 import com.onclass.user.adapters.driving.http.dto.request.AuthRegisterRequest;
 import com.onclass.user.adapters.driving.http.dto.request.LoginRequest;
 import com.onclass.user.adapters.driving.http.dto.response.auth.AuthResponse;
@@ -27,9 +28,9 @@ public class  AuthRestControllerAdapter {
         return ResponseEntity.ok(authAdapter.login(authMapper.toAuth(request)));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody AuthRegisterRequest request)
+    @PostMapping("/register/admin")
+    public ResponseEntity<AuthResponse> registerAdmin(@RequestBody AddUserRequest request)
     {
-        return ResponseEntity.ok(authAdapter.register(authMapper.toUser(request)));
+        return ResponseEntity.ok(authAdapter.registerAdmin(authMapper.toUser(request)));
     }
 }

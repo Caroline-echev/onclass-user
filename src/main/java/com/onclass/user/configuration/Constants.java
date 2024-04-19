@@ -8,4 +8,6 @@ public class Constants {
 
     public static final String USER_EMAIL_ALREADY_EXISTS_EXCEPTION_MESSAGE = "The user email you want to create already exists";
     public static final String USER_DOCUMENT_ALREADY_EXISTS_EXCEPTION_MESSAGE = "The user document you want to create already exists";
+
+    public static  final String ROLE_ADMIN ="ADMIN";
    }

@@ -21,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +38,6 @@ public class AuthAdapter {
     private final IRoleRepository roleRepository;
     private final IUserEntityMapper userEntityMapper;
     private final IRoleEntityMapper roleEntityMapper;
-    private final IUserRequestMapper userRequestMapper;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -53,9 +54,9 @@ public class AuthAdapter {
         }
 
     }
-    public AuthResponse register(User user ) {
-
+    public AuthResponse registerAdmin(User user ) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(getRole(Constants.ROLE_ADMIN));
         UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));
 
         return AuthResponse.builder()
@@ -64,10 +65,8 @@ public class AuthAdapter {
 
     }
 
-
-
-    private Role getRole(Long id) {
-        RoleEntity role =  roleRepository.findById(1L)
+    private Role getRole(String roleName) {
+        RoleEntity role =  roleRepository.findByName(roleName)
                 .orElseThrow(() -> new NoDataFoundException(Constants.NO_DATA_FOUND_EXCEPTION_MESSAGE));
         return  roleEntityMapper.toModel(role);
     }

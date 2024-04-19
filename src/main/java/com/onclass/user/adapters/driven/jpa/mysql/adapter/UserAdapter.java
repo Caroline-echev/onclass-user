@@ -34,7 +34,7 @@ public class UserAdapter implements IUserPersistencePort {
 
 
     private Role getDefaultRole() {
-        RoleEntity role =  roleRepository.findById(1L)//TODO: BUSCAR POR NOMBRE
+        RoleEntity role =  roleRepository.findByName(Constants.ROLE_ADMIN)
                 .orElseThrow(() -> new NoDataFoundException(Constants.NO_DATA_FOUND_EXCEPTION_MESSAGE));
         return  roleEntityMapper.toModel(role);
     }
