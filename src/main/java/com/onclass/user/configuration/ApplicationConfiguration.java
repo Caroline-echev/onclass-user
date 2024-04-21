@@ -35,13 +35,13 @@ public class ApplicationConfiguration {
 
     @Bean
     public IUserPersistencePort userPersistencePort() {
-        return new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper);
+        return new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder());
     }
 
 
     @Bean
     public IUserServicePort userServicePort() {
-        return new UserUseCase(userPersistencePort(), passwordEncoder());
+        return new UserUseCase(userPersistencePort());
     }
 
     @Bean

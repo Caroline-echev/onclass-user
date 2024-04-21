@@ -3,7 +3,6 @@ package com.onclass.user.adapters.driving.http.mapper;
 import com.onclass.user.adapters.driving.http.dto.request.AddUserRequest;
 import com.onclass.user.adapters.driving.http.dto.request.AuthRegisterRequest;
 import com.onclass.user.domain.model.User;
-import jakarta.validation.Valid;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

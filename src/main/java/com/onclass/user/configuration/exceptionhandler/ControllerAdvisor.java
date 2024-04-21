@@ -6,10 +6,14 @@ import com.onclass.user.configuration.Constants;
 import com.onclass.user.domain.exception.DocumentAlreadyExistsException;
 import com.onclass.user.domain.exception.EmailAlreadyExistsException;
 import com.onclass.user.domain.exception.NoDataFoundException;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -55,5 +59,29 @@ public class ControllerAdvisor {
     public ResponseEntity<ExceptionCodeResponse> handleBadCredentialsException(BadCredentialsException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionCodeResponse(exception.getMessage(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(), LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value()));
+    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ExceptionCodeResponse> handleUsernameNotFoundException(UsernameNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionCodeResponse(
+                exception.getMessage(), HttpStatus.NOT_FOUND.getReasonPhrase(), LocalDateTime.now(), HttpStatus.NOT_FOUND.value()));
+    }
+
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionCodeResponse> handleAccessDeniedException(AccessDeniedException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionCodeResponse(
+                exception.getMessage(), HttpStatus.FORBIDDEN.getReasonPhrase(), LocalDateTime.now(), HttpStatus.FORBIDDEN.value()));
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ExceptionCodeResponse> handleExpiredJwtException(ExpiredJwtException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionCodeResponse(
+                exception.getMessage(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value()));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ExceptionCodeResponse> handleAuthenticationException(AuthenticationException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionCodeResponse(
+                exception.getMessage(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value()));
     }
 }

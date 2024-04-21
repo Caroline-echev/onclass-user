@@ -1,7 +1,5 @@
 package com.onclass.user.adapters.driven.jpa.mysql.adapter;
 
-import com.onclass.user.adapters.driven.jpa.mysql.entity.RoleEntity;
-import com.onclass.user.adapters.driven.jpa.mysql.entity.UserEntity;
 import com.onclass.user.adapters.driven.jpa.mysql.mapper.IRoleEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.mapper.IUserEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.repository.IRoleRepository;
@@ -9,17 +7,15 @@ import com.onclass.user.adapters.driven.jpa.mysql.repository.IUserRepository;
 import com.onclass.user.configuration.Constants;
 import com.onclass.user.data.RoleData;
 import com.onclass.user.data.UserData;
-import com.onclass.user.domain.exception.DocumentAlreadyExistsException;
-import com.onclass.user.domain.exception.EmailAlreadyExistsException;
+import com.onclass.user.domain.exception.NoDataFoundException;
 import com.onclass.user.domain.model.Role;
 import com.onclass.user.domain.model.User;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -40,55 +36,61 @@ class UserAdapterTest {
 
     @Mock
     private IRoleEntityMapper roleEntityMapper;
-
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
     private UserAdapter userAdapter;
 
     private static final UserData userData = new UserData();
     private static final RoleData roleData = new RoleData();
     @Test
-    @DisplayName("Test that the user register correctly")
     void testRegisterUser() {
-        // GIVEN
+        //GIVEN
         User user = UserData.createUser();
+        Role role = roleData.roleAdmin();
+
+        //WHEN
+        when(roleRepository.findByName(Constants.ROLE_ADMIN)).thenReturn(Optional.of(roleData.roleAdminEntity()));
+        when(roleEntityMapper.toModel(any())).thenReturn(role);
+
+        UserAdapter userAdapter = new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder);
+        userAdapter.registerUser(user);
+
+        //THEN
+        verify(userRepository, times(1)).save(any());
+        assertEquals(role, user.getRole());
+    }
+    @Test
+     void testGetUserByEmail() {
+        //GIVEN
+        User user = UserData.createUser();
+
+        //WHEN
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserData.createUserEntity()));
+        when(userEntityMapper.toUserModel(any())).thenReturn(user);
+        UserAdapter userAdapter = new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder);
+
+        //THEN
+        assertEquals(user, userAdapter.getUserByEmail(user.getEmail()));
+    }
+
+    @Test
+    void testGetUserByEmailNotFound() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-        when(userRepository.findByDocument(anyString())).thenReturn(Optional.empty());
-        when(roleRepository.findById(anyLong())).thenReturn(Optional.of(RoleData.roleAdminEntity()));
-        when(userEntityMapper.toEntity(any(User.class))).thenReturn(UserData.createUserEntity());
-        when(roleEntityMapper.toModel(any(RoleEntity.class))).thenReturn(RoleData.roleAdmin());
 
-        // WHEN
-         userAdapter.registerUser(user);
-
-        // THEN
-
-        verify(userRepository).findByEmail(anyString());
-        verify(userRepository).findByDocument(anyString());
-        verify(roleRepository).findById(anyLong());
-        verify(userEntityMapper).toEntity(any(User.class));
-        verify(roleEntityMapper).toModel(any(RoleEntity.class));
-        verify(userRepository).save(any(UserEntity.class));
+        UserAdapter userAdapter = new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder);
+        assertThrows(NoDataFoundException.class, () -> userAdapter.getUserByEmail("nonexistent@example.com"));
     }
 
     @Test
-    @DisplayName("Test that the user not register because the email already exists")
-    void testRegisterUserEmailAlreadyExists() {
-        // GIVEN
+    public void testEncoderPassword() {
         User user = UserData.createUser();
+        user.setPassword("password123");
 
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(new UserEntity()));
-        // WHEN  - THEN
-         assertThrows(EmailAlreadyExistsException.class, () -> userAdapter.registerUser(user));
-    }
-    @Test
-    @DisplayName("Test that the user not register because the document already exists")
-    void testRegisterUserDocumentAlreadyExists() {
-        // GIVEN
-        User user = UserData.createUser();
+        UserAdapter userAdapter = new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder);
+        userAdapter.encoderPassword(user);
 
-        when(userRepository.findByDocument(anyString())).thenReturn(Optional.of(new UserEntity()));
-        // WHEN  - THEN
-        assertThrows(DocumentAlreadyExistsException.class, () -> userAdapter.registerUser(user));
+        verify(passwordEncoder, times(1)).encode("password123");
     }
 }
 

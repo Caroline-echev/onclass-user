@@ -9,7 +9,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
+jwt:
+  secret: ${secret}
 logging:
   level:
     org:

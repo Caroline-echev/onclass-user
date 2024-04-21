@@ -6,4 +6,6 @@ public interface IUserPersistencePort {
     void registerUser(User user);
 
     User getUserByEmail(String email);
+
+    void encoderPassword(User user);
 }

@@ -1,7 +1,5 @@
 package com.onclass.user.domain.model;
 
-import com.onclass.user.adapters.driven.jpa.mysql.entity.RoleEntity;
-
 public class User {
     private Long id;
     private String document;

@@ -31,27 +31,16 @@ class UserRestControllerAdapterTest {
     private UserRestControllerAdapter userRestControllerAdapter;
 
     private static final UserData userData = new UserData();
-    /*@Test
-    void testRegisterUser() {
-        // Given
+    @Test
+     void testRegisterUser() {
         AddUserRequest request = userData.createUserRequest();
         User user = userData.createUser();
-        UserResponse userResponse = userData.createUserResponse();
-
         when(userRequestMapper.addRequestToUser(request)).thenReturn(user);
-        when(userServicePort.registerUser(user)).thenReturn(user);
-        when(userResponseMapper.toUserResponse(user)).thenReturn(userResponse);
 
-        // When
-        ResponseEntity<UserResponse> responseEntity = userRestControllerAdapter.registerUser(request);
+        UserRestControllerAdapter userRestControllerAdapter = new UserRestControllerAdapter(userServicePort, userRequestMapper, userResponseMapper);
+        ResponseEntity<Void> responseEntity = userRestControllerAdapter.registerUser(request);
 
-        // Then
-        assertNotNull(responseEntity);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(userResponse, responseEntity.getBody());
-
-        verify(userRequestMapper, times(1)).addRequestToUser(request);
         verify(userServicePort, times(1)).registerUser(user);
-        verify(userResponseMapper, times(1)).toUserResponse(user);
-    }*/
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    }
 }
