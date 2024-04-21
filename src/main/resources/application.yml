@@ -6,7 +6,13 @@ spring:
     url: jdbc:mysql://localhost/onclass_user
     username: ${username}
     password: ${password}
-
   jpa:
     hibernate:
       ddl-auto: update
+jwt:
+  secret: ${secret}
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
