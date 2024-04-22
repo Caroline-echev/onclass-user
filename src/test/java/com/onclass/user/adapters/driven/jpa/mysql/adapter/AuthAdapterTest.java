@@ -79,7 +79,7 @@ class AuthAdapterTest {
 
     @Test
     public void testRegisterAdmin() {
-        User user = userData.createUser();
+        User user = userData.createUserAdmin();
         String encodedPassword = "encodedPassword";
         String roleName = Constants.ROLE_ADMIN;
         RoleEntity roleEntity = roleData.roleAdminEntity();
@@ -97,4 +97,5 @@ class AuthAdapterTest {
         assertNotNull(authResponse);
         assertNotNull(authResponse.getToken());
     }
+
 }

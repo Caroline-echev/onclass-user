@@ -46,7 +46,7 @@ class UserAdapterTest {
     @Test
     void testRegisterUser() {
         //GIVEN
-        User user = UserData.createUser();
+        User user = UserData.createUserAdmin();
         Role role = roleData.roleAdmin();
 
         //WHEN
@@ -63,7 +63,7 @@ class UserAdapterTest {
     @Test
      void testGetUserByEmail() {
         //GIVEN
-        User user = UserData.createUser();
+        User user = UserData.createUserAdmin();
 
         //WHEN
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserData.createUserEntity()));
@@ -84,13 +84,22 @@ class UserAdapterTest {
 
     @Test
     public void testEncoderPassword() {
-        User user = UserData.createUser();
+        User user = UserData.createUserAdmin();
         user.setPassword("password123");
 
         UserAdapter userAdapter = new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder);
         userAdapter.encoderPassword(user);
 
         verify(passwordEncoder, times(1)).encode("password123");
+    }
+    @Test
+    public void testRegisterUser_NoDefaultRoleFound() {
+        User user = UserData.createUserAdmin();
+        when(roleRepository.findByName(Constants.ROLE_ADMIN)).thenReturn(Optional.empty());
+
+        UserAdapter userAdapter = new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder);
+
+        assertThrows(NoDataFoundException.class, () -> userAdapter.registerUser(user));
     }
 }
 

@@ -33,4 +33,10 @@ public class  AuthRestControllerAdapter {
     {
         return ResponseEntity.ok(authAdapter.registerAdmin(authMapper.toUser(request)));
     }
+
+    @PostMapping("/register/tutor")
+    public ResponseEntity<AuthResponse> registerTutor(@RequestBody AddUserRequest request)
+    {
+        return ResponseEntity.ok(authAdapter.registerTutor(authMapper.toUser(request)));
+    }
 }

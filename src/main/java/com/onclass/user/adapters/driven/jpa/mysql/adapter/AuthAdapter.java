@@ -47,6 +47,7 @@ public class AuthAdapter {
 
     }
     public AuthResponse registerAdmin(User user ) {
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(getRole(Constants.ROLE_ADMIN));
         UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));
@@ -56,11 +57,23 @@ public class AuthAdapter {
                 .build();
 
     }
+    public AuthResponse registerTutor(User user) {
 
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRole(getRole(Constants.ROLE_TUTOR));
+            UserEntity userEntity = userRepository.save(userEntityMapper.toEntity(user));
+
+            return AuthResponse.builder()
+                    .token(jwtService.getToken(userEntityMapper.toUserModel(userEntity)))
+                    .build();
+
+    }
     private Role getRole(String roleName) {
         RoleEntity role =  roleRepository.findByName(roleName)
                 .orElseThrow(() -> new NoDataFoundException(Constants.NO_DATA_FOUND_EXCEPTION_MESSAGE));
         return  roleEntityMapper.toModel(role);
     }
+
+
 
 }

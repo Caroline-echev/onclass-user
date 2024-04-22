@@ -32,7 +32,7 @@ class AuthUseCaseTest {
     @Test
      void testLogin() {
         Auth auth = authData.createAuth();
-        User user = userData.createUser();
+        User user = userData.createUserAdmin();
         String expectedToken = authData.createToken();
 
         when(userServicePort.getUserByEmail(auth.getEmail())).thenReturn(user);
@@ -46,7 +46,7 @@ class AuthUseCaseTest {
 
     @Test
     void testRegisterAdmin() {
-        User user = userData.createUser();
+        User user = userData.createUserAdmin();
         String expectedToken = authData.createToken();
 
         when(tokenPort.getToken(user)).thenReturn(expectedToken);
@@ -56,4 +56,5 @@ class AuthUseCaseTest {
 
         assertEquals(expectedToken, actualToken);
     }
+
 }

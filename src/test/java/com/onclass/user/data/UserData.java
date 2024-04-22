@@ -9,8 +9,12 @@ public class UserData {
 
     static  RoleData roleData = new RoleData();
 
-    public static User createUser() {
+    public static User createUserAdmin() {
         return new User(1L, "123", "Harry",  "Styles",  "4321",
+                "harry@email.com", "Password123");
+    }
+    public static User createUserTutor() {
+        return new User(2L, "123", "Harry",  "Styles",  "4321",
                 "harry@email.com", "Password123");
     }
     public static UserEntity createUserEntity() {

@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                                         "/auth/login"
                                 ).permitAll()
                                 .requestMatchers("/auth/register/admin").hasAuthority("ADMIN")
+                                .requestMatchers("/auth/register/tutor").hasAuthority("ADMIN")
                                 .requestMatchers("/user/registerUser").permitAll()
                                 .anyRequest().authenticated()
                 )

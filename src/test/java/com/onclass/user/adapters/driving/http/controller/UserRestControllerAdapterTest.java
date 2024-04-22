@@ -34,7 +34,7 @@ class UserRestControllerAdapterTest {
     @Test
      void testRegisterUser() {
         AddUserRequest request = userData.createUserRequest();
-        User user = userData.createUser();
+        User user = userData.createUserAdmin();
         when(userRequestMapper.addRequestToUser(request)).thenReturn(user);
 
         UserRestControllerAdapter userRestControllerAdapter = new UserRestControllerAdapter(userServicePort, userRequestMapper, userResponseMapper);
