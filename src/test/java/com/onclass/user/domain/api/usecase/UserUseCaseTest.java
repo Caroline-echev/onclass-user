@@ -24,7 +24,7 @@ class UserUseCaseTest {
 
     @Test
     void testRegisterUser() {
-        User user = userData.createUserAdmin();
+        User user = userData.createUser();
         UserUseCase userUseCase = new UserUseCase(userPersistencePort);
 
         userUseCase.registerUser(user);
@@ -36,7 +36,7 @@ class UserUseCaseTest {
     @Test
     void testGetUserByEmail() {
 
-        User user =  userData.createUserAdmin();
+        User user =  userData.createUser();
         when(userPersistencePort.getUserByEmail(user.getEmail())).thenReturn(user);
 
         UserUseCase userUseCase = new UserUseCase(userPersistencePort);

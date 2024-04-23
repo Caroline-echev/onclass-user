@@ -53,7 +53,7 @@ class AuthRestControllerAdapterTest {
         AddUserRequest request = authData.createAddUserRequest();
         AuthResponse expectedResponse = authData.createAuthResponse();
 
-        when(authMapper.toUser(request)).thenReturn(userData.createUserAdmin());
+        when(authMapper.toUser(request)).thenReturn(userData.createUser());
         when(authAdapter.registerAdmin(any())).thenReturn(expectedResponse);
 
         AuthRestControllerAdapter authController = new AuthRestControllerAdapter(authMapper, authAdapter);
@@ -62,6 +62,22 @@ class AuthRestControllerAdapterTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expectedResponse, responseEntity.getBody());
     }
+    @Test
+    void testRegisterTutor() {
+        AddUserRequest request = authData.createAddUserRequest();
+        AuthResponse expectedResponse = authData.createAuthResponse();
+
+        when(authMapper.toUser(request)).thenReturn(userData.createUser());
+        when(authAdapter.registerTutor(any())).thenReturn(expectedResponse);
+
+        AuthRestControllerAdapter authController = new AuthRestControllerAdapter(authMapper, authAdapter);
+        ResponseEntity<AuthResponse> responseEntity = authController.registerTutor(request);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedResponse, responseEntity.getBody());
+    }
+
+
 
 
 

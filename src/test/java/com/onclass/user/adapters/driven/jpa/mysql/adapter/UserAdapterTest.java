@@ -46,7 +46,7 @@ class UserAdapterTest {
     @Test
     void testRegisterUser() {
         //GIVEN
-        User user = UserData.createUserAdmin();
+        User user = UserData.createUser();
         Role role = roleData.roleAdmin();
 
         //WHEN
@@ -63,10 +63,10 @@ class UserAdapterTest {
     @Test
      void testGetUserByEmail() {
         //GIVEN
-        User user = UserData.createUserAdmin();
+        User user = UserData.createUser();
 
         //WHEN
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserData.createUserEntity()));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserData.createUserEntityAdmin()));
         when(userEntityMapper.toUserModel(any())).thenReturn(user);
         UserAdapter userAdapter = new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder);
 
@@ -84,7 +84,7 @@ class UserAdapterTest {
 
     @Test
     public void testEncoderPassword() {
-        User user = UserData.createUserAdmin();
+        User user = UserData.createUser();
         user.setPassword("password123");
 
         UserAdapter userAdapter = new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder);
@@ -94,7 +94,7 @@ class UserAdapterTest {
     }
     @Test
     public void testRegisterUser_NoDefaultRoleFound() {
-        User user = UserData.createUserAdmin();
+        User user = UserData.createUser();
         when(roleRepository.findByName(Constants.ROLE_ADMIN)).thenReturn(Optional.empty());
 
         UserAdapter userAdapter = new UserAdapter(userRepository, userEntityMapper, roleRepository, roleEntityMapper, passwordEncoder);

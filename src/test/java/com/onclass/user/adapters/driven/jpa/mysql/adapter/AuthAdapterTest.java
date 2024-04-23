@@ -12,6 +12,7 @@ import com.onclass.user.configuration.jwt.JwtService;
 import com.onclass.user.data.AuthData;
 import com.onclass.user.data.RoleData;
 import com.onclass.user.data.UserData;
+import com.onclass.user.domain.exception.NoDataFoundException;
 import com.onclass.user.domain.model.Auth;
 import com.onclass.user.domain.model.User;
 import org.junit.jupiter.api.Test;
@@ -20,8 +21,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,7 +67,7 @@ class AuthAdapterTest {
     @Test
     void testLogin_Successful() {
         Auth auth = new Auth("test@example.com", "password");
-        UserEntity userEntity = userData.createUserEntity();
+        UserEntity userEntity = userData.createUserEntityAdmin();
         String token =  authData.createToken();
 
         when(authenticationManager.authenticate(any())).thenReturn(mock(Authentication.class));
@@ -76,14 +82,25 @@ class AuthAdapterTest {
         assertEquals(token, authResponse.getToken());
     }
 
+    @Test
+    void testLogin_ExceptionThrown() {
+        Auth auth = new Auth("test@example.com", "password");
+
+
+        when(userRepository.findByEmail(auth.getEmail())).thenReturn(Optional.empty());
+
+        assertThrows(BadCredentialsException.class, () -> authAdapter.login(auth));
+    }
+
+
 
     @Test
     public void testRegisterAdmin() {
-        User user = userData.createUserAdmin();
+        User user = userData.createUser();
         String encodedPassword = "encodedPassword";
         String roleName = Constants.ROLE_ADMIN;
         RoleEntity roleEntity = roleData.roleAdminEntity();
-        UserEntity userEntity = userData.createUserEntity();
+        UserEntity userEntity = userData.createUserEntityAdmin();
 
         when(passwordEncoder.encode(user.getPassword())).thenReturn(encodedPassword);
         when(roleRepository.findByName(roleName)).thenReturn(java.util.Optional.of(roleEntity));
@@ -93,6 +110,27 @@ class AuthAdapterTest {
         AuthAdapter authAdapter = new AuthAdapter(userRepository, roleRepository, userEntityMapper, roleEntityMapper, jwtService, passwordEncoder, authenticationManager);
 
         AuthResponse authResponse = authAdapter.registerAdmin(user);
+
+        assertNotNull(authResponse);
+        assertNotNull(authResponse.getToken());
+    }
+
+    @Test
+    public void testRegisterTutor() {
+        User user = userData.createUser();
+        String encodedPassword = "encodedPassword";
+        String roleName = Constants.ROLE_TUTOR;
+        RoleEntity roleEntity = roleData.roleTutorEntity();
+        UserEntity userEntity = userData.createUserEntityTutor();
+
+        when(passwordEncoder.encode(user.getPassword())).thenReturn(encodedPassword);
+        when(roleRepository.findByName(roleName)).thenReturn(java.util.Optional.of(roleEntity));
+        when(userRepository.save(any())).thenReturn(userEntity);
+        when(jwtService.getToken(any())).thenReturn("token");
+
+        AuthAdapter authAdapter = new AuthAdapter(userRepository, roleRepository, userEntityMapper, roleEntityMapper, jwtService, passwordEncoder, authenticationManager);
+
+        AuthResponse authResponse = authAdapter.registerTutor(user);
 
         assertNotNull(authResponse);
         assertNotNull(authResponse.getToken());
