@@ -10,6 +10,8 @@ public class AuthData {
     public static LoginRequest createLoginRequest() {
         return new LoginRequest("harry@email.com", "Password123");
     }
+    public  static final String EMAIL = "harry@email.com";
+    public  static final String PASSWORD = "Password123";
     public static Auth createAuth() {
         return new Auth("harry@email.com", "Password123");
     }

@@ -5,9 +5,10 @@ import com.onclass.user.adapters.driven.jpa.mysql.mapper.IUserEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.repository.IRoleRepository;
 import com.onclass.user.adapters.driven.jpa.mysql.repository.IUserRepository;
 import com.onclass.user.configuration.Constants;
+import com.onclass.user.configuration.exception.AdminAlreadyExistsException;
+import com.onclass.user.configuration.exception.NoDataFoundException;
 import com.onclass.user.data.RoleData;
 import com.onclass.user.data.UserData;
-import com.onclass.user.domain.exception.NoDataFoundException;
 import com.onclass.user.domain.model.Role;
 import com.onclass.user.domain.model.User;
 import org.junit.jupiter.api.Test;
@@ -61,6 +62,20 @@ class UserAdapterTest {
         assertEquals(role, user.getRole());
     }
     @Test
+    void testRegisterUser_AdminAlreadyExistsException() {
+        //GIVEN
+        User user = UserData.createUser();
+        Role role = roleData.roleAdmin();
+
+        when(roleRepository.findByName(Constants.ROLE_ADMIN)).thenReturn(Optional.of(roleData.roleAdminEntity()));
+        when(roleEntityMapper.toModel(any())).thenReturn(role);
+        when(userRepository.findByRole(any())).thenReturn(Optional.of(UserData.createUserEntityAdmin()));
+
+        //THEN
+        AdminAlreadyExistsException exception = assertThrows(AdminAlreadyExistsException.class, () -> userAdapter.registerUser(user));
+        assertEquals(Constants.ADMIN_ALREADY_EXISTS_EXCEPTION_MESSAGE, exception.getMessage());
+    }
+    @Test
      void testGetUserByEmail() {
         //GIVEN
         User user = UserData.createUser();
@@ -83,7 +98,7 @@ class UserAdapterTest {
     }
 
     @Test
-    public void testEncoderPassword() {
+    void testEncoderPassword() {
         User user = UserData.createUser();
         user.setPassword("password123");
 
@@ -93,7 +108,7 @@ class UserAdapterTest {
         verify(passwordEncoder, times(1)).encode("password123");
     }
     @Test
-    public void testRegisterUser_NoDefaultRoleFound() {
+    void testRegisterUser_NoDefaultRoleFound() {
         User user = UserData.createUser();
         when(roleRepository.findByName(Constants.ROLE_ADMIN)).thenReturn(Optional.empty());
 

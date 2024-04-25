@@ -1,7 +1,6 @@
 package com.onclass.user.adapters.driving.http.controller;
 
 import com.onclass.user.adapters.driving.http.dto.request.AddUserRequest;
-import com.onclass.user.adapters.driving.http.dto.response.user.UserResponse;
 import com.onclass.user.adapters.driving.http.mapper.IUserRequestMapper;
 import com.onclass.user.adapters.driving.http.mapper.IUserResponseMapper;
 import com.onclass.user.data.UserData;
@@ -31,13 +30,13 @@ class UserRestControllerAdapterTest {
     private UserRestControllerAdapter userRestControllerAdapter;
 
     private static final UserData userData = new UserData();
+
     @Test
     void testRegisterUser() {
         AddUserRequest request = userData.createUserRequest();
         User user = userData.createUser();
         when(userRequestMapper.addRequestToUser(request)).thenReturn(user);
 
-        UserRestControllerAdapter userRestControllerAdapter = new UserRestControllerAdapter(userServicePort, userRequestMapper, userResponseMapper);
         ResponseEntity<Void> responseEntity = userRestControllerAdapter.registerUser(request);
 
         verify(userServicePort, times(1)).registerUser(user);

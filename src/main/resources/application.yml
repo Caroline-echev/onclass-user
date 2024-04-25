@@ -16,3 +16,8 @@ logging:
     org:
       springframework:
         security: TRACE
+springdoc:
+  swagger-ui:
+    path: /doc/swagger-ui/index.html
+  api-docs:
+    path: /v3/api-docs

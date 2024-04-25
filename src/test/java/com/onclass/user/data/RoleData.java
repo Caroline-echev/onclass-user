@@ -23,6 +23,9 @@ public class RoleData {
         return  new Role(3L, "STUDENT", "Description Admin");
     }
 
+    public static RoleEntity roleStudentEntity(){
+        return  new RoleEntity(3L, "STUDENT", "Description Admin");
+    }
     public static RoleResponse roleAdminResponse(){
         return new RoleResponse( "ADMIN");
 

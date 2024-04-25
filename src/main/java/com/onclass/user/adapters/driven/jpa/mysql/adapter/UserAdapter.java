@@ -7,7 +7,8 @@ import com.onclass.user.adapters.driven.jpa.mysql.mapper.IUserEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.repository.IRoleRepository;
 import com.onclass.user.adapters.driven.jpa.mysql.repository.IUserRepository;
 import com.onclass.user.configuration.Constants;
-import com.onclass.user.domain.exception.NoDataFoundException;
+import com.onclass.user.configuration.exception.AdminAlreadyExistsException;
+import com.onclass.user.configuration.exception.NoDataFoundException;
 import com.onclass.user.domain.model.Role;
 import com.onclass.user.domain.model.User;
 import com.onclass.user.domain.spi.IUserPersistencePort;
@@ -25,8 +26,11 @@ public class UserAdapter implements IUserPersistencePort {
     private final PasswordEncoder passwordEncoder;
     @Override
     public void registerUser(User user) {
+        user.setRole( getDefaultRole());
+        if(userRepository.findByRole( roleEntityMapper.toEntity(user.getRole())).isPresent()){
+            throw new AdminAlreadyExistsException(Constants.ADMIN_ALREADY_EXISTS_EXCEPTION_MESSAGE);
+        }
 
-        user.setRole(getDefaultRole());
         userRepository.save(userEntityMapper.toEntity(user));
     }
 

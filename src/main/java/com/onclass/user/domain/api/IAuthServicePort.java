@@ -10,4 +10,5 @@ IAuthServicePort {
 
   String registerAdmin(User user);
   String registerTutor(User user);
+  String registerStudent(User user);
 }

@@ -1,4 +1,4 @@
-package com.onclass.user.domain.exception;
+package com.onclass.user.configuration.exception;
 
 public class EmailAlreadyExistsException extends RuntimeException {
 

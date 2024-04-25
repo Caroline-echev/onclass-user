@@ -1,6 +1,5 @@
 package com.onclass.user.configuration.jwt;
 
-import com.onclass.user.adapters.driven.jpa.mysql.mapper.IAuthMapper;
 import com.onclass.user.domain.model.User;
 import com.onclass.user.domain.spi.ITokenPort;
 import io.jsonwebtoken.Claims;

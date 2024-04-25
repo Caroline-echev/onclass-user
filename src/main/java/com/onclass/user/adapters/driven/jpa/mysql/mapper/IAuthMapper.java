@@ -1,7 +1,6 @@
 package com.onclass.user.adapters.driven.jpa.mysql.mapper;
 
 import com.onclass.user.adapters.driving.http.dto.request.AddUserRequest;
-import com.onclass.user.adapters.driving.http.dto.request.AuthRegisterRequest;
 import com.onclass.user.adapters.driving.http.dto.request.LoginRequest;
 import com.onclass.user.domain.model.Auth;
 import com.onclass.user.domain.model.User;
@@ -17,5 +16,4 @@ public interface IAuthMapper {
     Auth toAuth(LoginRequest request);
 
     User toUser (AddUserRequest request);
-    User authRequestToUser (AuthRegisterRequest request);
 }
