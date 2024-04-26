@@ -27,4 +27,14 @@ public class AuthUseCase implements IAuthServicePort {
         return tokenPort.getToken(user);
 
     }
+    @Override
+    public String registerTutor(User user) {
+        return tokenPort.getToken(user);
+
+    }
+    @Override
+    public String registerStudent(User user) {
+        return tokenPort.getToken(user);
+
+    }
 }

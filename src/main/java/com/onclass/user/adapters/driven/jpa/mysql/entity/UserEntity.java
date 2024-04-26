@@ -22,15 +22,15 @@ public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 15)
     private String document;
-    @Column(nullable = false)
+    @Column(nullable = false,  length = 50)
     private String firstName;
-    @Column(nullable = false)
+    @Column(nullable = false,  length = 50)
     private String lastName;
-    @Column(nullable = false )
+    @Column(nullable = false , length = 10)
     private String phone;
-    @Column(nullable = false )
+    @Column(nullable = false,  length = 50 )
     private String email;
     @Column(nullable = false )
     private String password;

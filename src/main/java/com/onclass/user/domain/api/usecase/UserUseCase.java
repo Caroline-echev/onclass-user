@@ -1,7 +1,7 @@
 package com.onclass.user.domain.api.usecase;
 
+import com.onclass.user.configuration.exception.NoDataFoundException;
 import com.onclass.user.domain.api.IUserServicePort;
-import com.onclass.user.domain.exception.NoDataFoundException;
 import com.onclass.user.domain.model.User;
 import com.onclass.user.domain.spi.IUserPersistencePort;
 

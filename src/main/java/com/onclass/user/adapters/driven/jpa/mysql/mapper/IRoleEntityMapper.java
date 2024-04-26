@@ -11,4 +11,5 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface IRoleEntityMapper {
     Role toModel(RoleEntity roleEntity);
+    RoleEntity toEntity(Role role);
 }

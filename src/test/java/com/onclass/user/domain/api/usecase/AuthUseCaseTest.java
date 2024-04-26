@@ -56,4 +56,28 @@ class AuthUseCaseTest {
 
         assertEquals(expectedToken, actualToken);
     }
+    @Test
+    void registerTutor() {
+        User user = userData.createUser();
+        String expectedToken = authData.createToken();
+
+        when(tokenPort.getToken(user)).thenReturn(expectedToken);
+
+        AuthUseCase authUseCase = new AuthUseCase(userServicePort, tokenPort);
+        String actualToken = authUseCase.registerTutor(user);
+
+        assertEquals(expectedToken, actualToken);
+    }
+    @Test
+    void registerStudent() {
+        User user = userData.createUser();
+        String expectedToken = authData.createToken();
+
+        when(tokenPort.getToken(user)).thenReturn(expectedToken);
+
+        AuthUseCase authUseCase = new AuthUseCase(userServicePort, tokenPort);
+        String actualToken = authUseCase.registerStudent(user);
+
+        assertEquals(expectedToken, actualToken);
+    }
 }

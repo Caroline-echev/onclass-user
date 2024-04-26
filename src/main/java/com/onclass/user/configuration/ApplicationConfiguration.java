@@ -5,12 +5,13 @@ import com.onclass.user.adapters.driven.jpa.mysql.mapper.IRoleEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.mapper.IUserEntityMapper;
 import com.onclass.user.adapters.driven.jpa.mysql.repository.IRoleRepository;
 import com.onclass.user.adapters.driven.jpa.mysql.repository.IUserRepository;
+import com.onclass.user.configuration.exception.EmailAlreadyExistsException;
 import com.onclass.user.configuration.jwt.JwtService;
 import com.onclass.user.domain.api.IAuthServicePort;
 import com.onclass.user.domain.api.IUserServicePort;
 import com.onclass.user.domain.api.usecase.AuthUseCase;
 import com.onclass.user.domain.api.usecase.UserUseCase;
-import com.onclass.user.domain.exception.EmailAlreadyExistsException;
+
 import com.onclass.user.domain.spi.ITokenPort;
 import com.onclass.user.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;

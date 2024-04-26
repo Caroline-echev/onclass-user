@@ -41,8 +41,8 @@ class AuthRestControllerAdapterTest {
         when(authMapper.toAuth(request)).thenReturn(authData.createAuth());
         when(authAdapter.login(any())).thenReturn(expectedResponse);
 
-        AuthRestControllerAdapter authController = new AuthRestControllerAdapter(authMapper, authAdapter);
-        ResponseEntity<AuthResponse> responseEntity = authController.login(request);
+
+        ResponseEntity<AuthResponse> responseEntity = authControllerAdapter.login(request);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expectedResponse, responseEntity.getBody());
@@ -56,10 +56,40 @@ class AuthRestControllerAdapterTest {
         when(authMapper.toUser(request)).thenReturn(userData.createUser());
         when(authAdapter.registerAdmin(any())).thenReturn(expectedResponse);
 
-        AuthRestControllerAdapter authController = new AuthRestControllerAdapter(authMapper, authAdapter);
-        ResponseEntity<AuthResponse> responseEntity = authController.registerAdmin(request);
+        ResponseEntity<AuthResponse> responseEntity = authControllerAdapter.registerAdmin(request);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expectedResponse, responseEntity.getBody());
     }
+    @Test
+    void testRegisterTutor() {
+        AddUserRequest request = authData.createAddUserRequest();
+        AuthResponse expectedResponse = authData.createAuthResponse();
+
+        when(authMapper.toUser(request)).thenReturn(userData.createUser());
+        when(authAdapter.registerTutor(any())).thenReturn(expectedResponse);
+
+        ResponseEntity<AuthResponse> responseEntity = authControllerAdapter.registerTutor(request);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedResponse, responseEntity.getBody());
+    }
+
+    @Test
+    void testRegisterStudent() {
+        AddUserRequest request = authData.createAddUserRequest();
+        AuthResponse expectedResponse = authData.createAuthResponse();
+
+        when(authMapper.toUser(request)).thenReturn(userData.createUser());
+        when(authAdapter.registerStudent(any())).thenReturn(expectedResponse);
+
+        ResponseEntity<AuthResponse> responseEntity = authControllerAdapter.registerStudent(request);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedResponse, responseEntity.getBody());
+    }
+
+
+
+
 }

@@ -26,10 +26,11 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers(
-                                        "/auth/login"
-                                ).permitAll()
+                                .requestMatchers("/auth/login").permitAll()
+                                .requestMatchers("/doc/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/auth/register/admin").hasAuthority("ADMIN")
+                                .requestMatchers("/auth/register/tutor").hasAuthority("ADMIN")
+                                .requestMatchers("/auth/register/student").hasAnyAuthority("ADMIN", "TUTOR")
                                 .requestMatchers("/user/registerUser").permitAll()
                                 .anyRequest().authenticated()
                 )
