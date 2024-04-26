@@ -26,15 +26,20 @@ public class JwtService implements ITokenPort {
     @Override
     public String getToken(User user) {
 
-        return getToken(new HashMap<>(), user );
+        return getToken(getExtraClaims(user), user );
     }
 
+    private  Map<String, ?> getExtraClaims(User user) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", user.getRole().getName());
+        return extraClaims;
+    }
 
  	private String getToken(Map<String, ?> extraClaims, User subject) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(subject.getEmail())
+                .subject(subject.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getKey(), SignatureAlgorithm.HS256)

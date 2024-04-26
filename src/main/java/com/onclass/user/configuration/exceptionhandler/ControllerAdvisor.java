@@ -7,6 +7,7 @@ import com.onclass.user.configuration.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -63,6 +64,12 @@ public class ControllerAdvisor {
         FieldError firstFieldError = exception.getFieldErrors().get(0);
         return ResponseEntity.badRequest().body(new ExceptionCodeResponse(firstFieldError.getDefaultMessage(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionCodeResponse> handleAccessDeniedException(AccessDeniedException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionCodeResponse(
+                exception.getMessage(), HttpStatus.FORBIDDEN.getReasonPhrase(), LocalDateTime.now(), HttpStatus.FORBIDDEN.value()));
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)

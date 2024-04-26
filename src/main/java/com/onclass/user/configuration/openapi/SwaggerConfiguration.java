@@ -18,8 +18,8 @@ public class SwaggerConfiguration {
                                 .scheme("bearer")
                                 .bearerFormat("JWT")))
                 .info(new io.swagger.v3.oas.models.info.Info()
-                        .title("用户服务")
-                        .description("用户服务")
+                        .title("Users")
+                        .description("User management service")
                         .version("1.0.0"));
     }
 }

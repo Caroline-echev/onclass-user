@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,7 +36,7 @@ public class  AuthRestControllerAdapter {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request)
+    public ResponseEntity<AuthResponse> login(@RequestBody  LoginRequest request)
     {
         return ResponseEntity.ok(authAdapter.login(authMapper.toAuth(request)));
     }
@@ -49,7 +50,7 @@ public class  AuthRestControllerAdapter {
     @PostMapping("/register/admin")
     @PreAuthorize("hasAuthority('ADMIN')")
 
-    public ResponseEntity<AuthResponse> registerAdmin(@RequestBody AddUserRequest request)
+    public ResponseEntity<AuthResponse> registerAdmin(@RequestBody @Valid  AddUserRequest request)
     {
         return ResponseEntity.ok(authAdapter.registerAdmin(authMapper.toUser(request)));
     }
@@ -63,7 +64,7 @@ public class  AuthRestControllerAdapter {
     @ApiResponse(responseCode = "404", description = "Not found")
     @PostMapping("/register/tutor")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<AuthResponse> registerTutor(@RequestBody AddUserRequest request)
+    public ResponseEntity<AuthResponse> registerTutor(@RequestBody @Valid AddUserRequest request)
     {
         return ResponseEntity.ok(authAdapter.registerTutor(authMapper.toUser(request)));
     }
@@ -77,7 +78,7 @@ public class  AuthRestControllerAdapter {
     @ApiResponse(responseCode = "404", description = "Not found")
     @PostMapping("/register/student")
     @PreAuthorize("hasAuthority('ADMIN' , 'TUTOR')")
-    public ResponseEntity<AuthResponse> registerStudent(@RequestBody AddUserRequest request)
+    public ResponseEntity<AuthResponse> registerStudent(@RequestBody @Valid AddUserRequest request)
     {
         return ResponseEntity.ok(authAdapter.registerStudent(authMapper.toUser(request)));
     }

@@ -14,6 +14,7 @@ import com.onclass.user.domain.api.usecase.UserUseCase;
 
 import com.onclass.user.domain.spi.ITokenPort;
 import com.onclass.user.domain.spi.IUserPersistencePort;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @RequiredArgsConstructor
@@ -79,4 +81,10 @@ public class ApplicationConfiguration {
                 .orElseThrow(() -> new EmailAlreadyExistsException(Constants.USER_EMAIL_ALREADY_EXISTS_EXCEPTION_MESSAGE));
     }
 
+    @Bean
+    public AccessDeniedHandler CustomAccessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        };
+    }
 }
